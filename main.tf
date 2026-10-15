@@ -1,17 +1,30 @@
-resource "azurerm_resource_group" "example" {
-  name     = "rg-devops-demo"
-  location = "Japan East"
 
-  tags = {
-    Environment = "Dev"
-    ManagedBy   = "Terraform"
+terraform {
+  required_version = ">= 1.5.0"
+
+  cloud {
+
+    organization = "Sandbox-Proj"
+
+    workspaces {
+      name = "my-proj-workspace-dev"
+    }
+  }
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
+    }
   }
 }
 
-output "resource_group_name" {
-  value = azurerm_resource_group.example.name
+provider "azurerm" {
+  features {}
+
 }
 
-output "resource_group_id" {
-  value = azurerm_resource_group.example.id
+resource "azurerm_resource_group" "rg" {
+  name     = var.resource_group_name
+  location = var.location
 }
